@@ -1,9 +1,9 @@
 # Photo Frame Fitter
 
-Everything is in one file, `Photo Frame Fitter.html`. It needs no build step and makes no network requests.
+Everything is in one file, `index.html`. It needs no build step and makes no network requests.
 
 ## Windows (Edge or Chrome)
-Double-click `Photo Frame Fitter.html`. It works offline.
+Double-click `index.html`. It works offline.
 
 ### Sony RAW (.ARW)
 The Windows version opens uncompressed Sony ARW files (such as those from the a7 II) at full sensor resolution:
@@ -19,12 +19,12 @@ The file must be hosted, because iPhone Safari won't run a page opened from the 
 - **Netlify Drop:** open https://app.netlify.com/drop and drag this folder onto the page. You get a URL.
 - **GitHub Pages:** push this folder to a repo, then turn on Settings → Pages (branch `main`, folder `/`).
 
-Hosts serve `index.html` as the default page, so either add `/Photo%20Frame%20Fitter.html` to the end of the site URL, or rename the file to `index.html` before uploading. Open that URL in Safari, then tap Share → **Add to Home Screen**.
+It is hosted on GitHub Pages at <https://sheltonsamuele-hue.github.io/photo-frame-fitter/>. Open that in Safari, then tap Share → **Add to Home Screen**.
 
 A claude.ai artifact link is **not** suitable: artifact pages block downloads, so saving wouldn't work.
 
 ## Developer tests
-Open `Photo Frame Fitter.html#debug` (or add `?debug` to the hosted URL) and use the test panel:
+Open `index.html#debug` (or add `?debug` to the hosted URL) and use the test panel:
 
 - **Run synthetic tests:** renders noise images in Fit and Fill across several frame setups. For each PNG, it checks that the photo region is pixel-identical to the decoded source, that the `pHYs` DPI and the border color are correct, and that no resampling `drawImage` call happens. It also checks EXIF orientation handling, JPEG JFIF density, EXIF preservation, the canvas size limit, the ZIP writer, and the ARW decoder (using a synthetic ARW file).
 - **Test loaded photos:** runs the same pixel-identity check on your own photos.
