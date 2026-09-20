@@ -1502,46 +1502,117 @@ const PRESETS = [
 // IKEA US; pic = the photo/frame opening size, cm = IKEA's metric size, mat.print = the photo the
 // included mat is made for, mat.open = the mat's window. mat.est lists lines whose opening IKEA
 // gave as the full photo size (or impossibly), so a ¼″ overlap per side is assumed instead.
-const IKEA_FRAMES = [
-  {"pic":[4,6],"cm":[10,15],"lines":["RÖDALM"],"mat":{"print":[3.25,4.75],"open":[2.75,4.25],"est":[],"printCm":[8,12],"openCm":[7,11]}},
-  {"pic":[4,6],"cm":[10,15],"lines":["FIKONTRÄD","FISKBO"]},
-  {"pic":[5,7],"cm":[13,18],"lines":["KNOPPÄNG","LOMVIKEN","PLOMMONTRÄD","RÖDALM","SILVERHÖJDEN"],"mat":{"print":[4,6],"open":[3.5,5.5],"est":[],"printCm":[10,15],"openCm":[9,14]}},
-  {"pic":[5,7],"cm":[13,18],"lines":["FISKBO","HÄCKHAGTORN","YLLEVAD"]},
-  {"pic":[8,10],"cm":[20.3,25.4],"lines":["DALSKÄRR","EDSBRUK","KNOPPÄNG","SILVERHÖJDEN"],"mat":{"print":[5,7],"open":[4.5,6.5],"est":["DALSKÄRR","EDSBRUK","KNOPPÄNG"],"printCm":[12.7,17.8],"openCm":[12,17]}},
-  {"pic":[8,10],"cm":[20,25],"lines":["KLOTKÖRSBÄR","KNOPPÄNG","LOMVIKEN","RÖDALM"],"mat":{"print":[5,7],"open":[4.75,6.75],"est":[],"printCm":[13,18],"openCm":[12,17]}},
-  {"pic":[8,10],"cm":[20,25],"lines":["FISKBO","HÄCKHAGTORN"]},
-  {"pic":[9.75,9.75],"cm":[25,25],"lines":["SANNAHED"],"mat":{"print":[5,5],"open":[4.75,4.75],"est":[],"printCm":[13,13],"openCm":[12,12]}},
-  {"pic":[8.25,11.75],"cm":[21,30],"lines":["YLLEVAD"]},
-  {"pic":[12.5,12.5],"cm":[32,32],"lines":["LOMVIKEN"],"mat":{"print":[7.75,7.75],"open":[7.5,7.5],"est":[],"printCm":[20,20],"openCm":[19,19]}},
-  {"pic":[12,16],"cm":[31,41],"lines":["EDSBRUK","KNOPPÄNG","LOMVIKEN"],"mat":{"print":[8,10],"open":[7,9],"est":[],"printCm":[20,25],"openCm":[19,24]}},
-  {"pic":[12,16],"cm":[31,41],"lines":["KNOPPÄNG","LOMVIKEN","PLOMMONTRÄD","RÖDALM","SILVERHÖJDEN"],"mat":{"print":[8,10],"open":[7.5,9.5],"est":["RÖDALM"],"printCm":[20,25],"openCm":[19,24]}},
-  {"pic":[12,16],"cm":[31,41],"lines":["FISKBO","HÄCKHAGTORN"]},
-  {"pic":[12.25,16.25],"cm":[31,41],"lines":["KLOTKÖRSBÄR"],"mat":{"print":[7.75,9.75],"open":[7.5,9.5],"est":[],"printCm":[20,25],"openCm":[19,24]}},
-  {"pic":[16,20],"cm":[41,51],"lines":["EDSBRUK"],"mat":{"print":[12,16],"open":[11,15],"est":[],"printCm":[31,41],"openCm":[29,39]}},
-  {"pic":[16,20],"cm":[41,51],"lines":["KNOPPÄNG","LOMVIKEN","SILVERHÖJDEN"],"mat":{"print":[12,16],"open":[11.5,15.5],"est":["KNOPPÄNG"],"printCm":[31,41],"openCm":[29,39]}},
-  {"pic":[16,20],"cm":[41,51],"lines":["KLOTKÖRSBÄR","KNOPPÄNG","RÖDALM"],"mat":{"print":[12,16],"open":[11.75,15.75],"est":[],"printCm":[31,41],"openCm":[30,40]}},
-  {"pic":[16,20],"cm":[41,51],"lines":["FISKBO","HÄCKHAGTORN"]},
-  {"pic":[19.75,19.75],"cm":[50,50],"lines":["SANNAHED"],"mat":{"print":[11.75,11.75],"open":[11.5,11.5],"est":[],"printCm":[30,30],"openCm":[29,29]}},
-  {"pic":[19.75,27.5],"cm":[50,70],"lines":["EDSBRUK","KLOTKÖRSBÄR","KNOPPÄNG","LOMVIKEN","RÖDALM","SILVERHÖJDEN"],"mat":{"print":[15.75,19.75],"open":[15.25,19.25],"est":[],"printCm":[40,50],"openCm":[39,49]}},
-  {"pic":[19.75,27.5],"cm":[50,70],"lines":["FISKBO"]},
-  {"pic":[24,35.75],"cm":[61,91],"lines":["KNOPPÄNG","LOMVIKEN","SILVERHÖJDEN"],"mat":{"print":[19.75,27.5],"open":[19.25,27.25],"est":[],"printCm":[50,70],"openCm":[49,69]}},
-  {"pic":[24,36],"cm":[61,91],"lines":["RÖDALM"],"mat":{"print":[19.75,27.5],"open":[19.25,27.25],"est":[],"printCm":[50,70],"openCm":[49,69]}},
-  {"pic":[27.5,39.25],"cm":[70,100],"lines":["RÖDALM"],"mat":{"print":[19.75,27.5],"open":[19.25,27.25],"est":[],"printCm":[50,70],"openCm":[49,69]}}
+const STORE_FRAMES = [
+  {"pic":[2.5,3.5],"cm":[6.3,8.9],"sup":["Hobby Lobby"],"lines":["Hobby Lobby Pink & Gold Scalloped Picture Frame"]},
+  {"pic":[3,3],"cm":[7.6,7.6],"sup":["Hobby Lobby"],"lines":["Hobby Lobby Whitewash Ornate Picture Frame"]},
+  {"pic":[3.25,4.25],"cm":[8.3,10.8],"sup":["Hobby Lobby"],"lines":["Hobby Lobby Instax Polaroid Picture Frame"],"mat":{"print":[2.1,3.4],"open":[1.6,2.9],"est":["Hobby Lobby Instax Polaroid Picture Frame"]}},
+  {"pic":[4,4],"cm":[10.2,10.2],"sup":["Hobby Lobby","Michaels"],"lines":["Hobby Lobby Brown Round Wood Picture Frame","Hobby Lobby Flower Stone Look Picture Frame","Hobby Lobby Gold Bow Metal Picture Frame","Hobby Lobby Pink Floral Beaded Picture Frame"],"more":3},
+  {"pic":[3.5,5],"cm":[8.9,12.7],"sup":["Michaels"],"lines":["Michaels Studio D\u00e9cor - Expressions\u2122 Silver Metal Tabletop Float Frame","Michaels Studio D\u00e9cor - Simply Essentials\u2122 Distressed Black Wood Frame","Michaels Studio D\u00e9cor - Simply Essentials\u2122 Linear Frame"]},
+  {"pic":[4,6],"cm":[10,15],"sup":["Hobby Lobby","IKEA","Michaels","Target"],"lines":["Hobby Lobby Antique Gold & Blue Deco Rhinestone Metal Picture Frame","Hobby Lobby Baseball Wood Clip Picture Frame","Hobby Lobby Black & Gold Scalloped Picture Frame","Hobby Lobby Black & White Paw Print Frame"],"more":28},
+  {"pic":[4,6],"cm":[10,15],"sup":["IKEA"],"lines":["IKEA R\u00d6DALM"],"mat":{"print":[3.25,4.75],"open":[2.75,4.25],"est":[],"printCm":[8,12],"openCm":[7,11]}},
+  {"pic":[5,5],"cm":[12.7,12.7],"sup":["Hobby Lobby","Michaels"],"lines":["Hobby Lobby Rattan Square Picture Frame","Hobby Lobby White Flowers Ornate Picture Frame","Michaels Studio D\u00e9cor - Lifestyles\u2122 5\" x 5\" Black Square Frame with Mat","Michaels Studio D\u00e9cor - Simply Essentials\u2122 Linear Frame"]},
+  {"pic":[5,7],"cm":[13,18],"sup":["Hobby Lobby","IKEA","Michaels","Target"],"lines":["Hobby Lobby Blue & Gold Scooped Edge Wood Picture Frame","Hobby Lobby Brown Etched Wood Picture Frame","Hobby Lobby Brown Wood Picture Frame","Hobby Lobby Gold & Cream Floral Corners Picture Frame"],"more":46},
+  {"pic":[5,7],"cm":[13,18],"sup":["IKEA","Michaels"],"lines":["IKEA KNOPP\u00c4NG","IKEA LOMVIKEN","IKEA PLOMMONTR\u00c4D","IKEA R\u00d6DALM"],"more":9,"mat":{"print":[4,6],"open":[3.5,5.5],"est":["Michaels Studio D\u00e9cor - Belmont Frame with Mat","Michaels Studio D\u00e9cor - Expressions\u2122 Gold Sydney Frame with Mat","Michaels Studio D\u00e9cor - Expressions\u2122 Silver Two Tone Frame with Mat","Michaels Studio D\u00e9cor - Gallery Black Frame with Double Mat"],"printCm":[10,15],"openCm":[9,14]}},
+  {"pic":[8,8],"cm":[20.3,20.3],"sup":["Michaels"],"lines":["Michaels Studio D\u00e9cor - Basics Black Frame"]},
+  {"pic":[8,8],"cm":[20.3,20.3],"sup":["Michaels"],"lines":["Michaels Studio D\u00e9cor - Gallery Black Frame with Double Mat"],"mat":{"print":[5,5],"open":[4.5,4.5],"est":["Michaels Studio D\u00e9cor - Gallery Black Frame with Double Mat"]}},
+  {"pic":[7.75,9.75],"cm":[19.7,24.8],"sup":["Hobby Lobby"],"lines":["Hobby Lobby Black Portrait Wall Frame"],"mat":{"print":[4,6],"open":[3.5,5.5],"est":["Hobby Lobby Black Portrait Wall Frame"]}},
+  {"pic":[8,10],"cm":[20,25],"sup":["Hobby Lobby","IKEA","Michaels","Target"],"lines":["Hobby Lobby Blue & Gold Scooped Edge Wood Picture Frame","Hobby Lobby Bronze Beaded Picture Frame","Hobby Lobby Brown Arch Top Wood Picture Frame","Hobby Lobby Brown Wood Picture Frame"],"more":47},
+  {"pic":[8,10],"cm":[20.3,25.4],"sup":["IKEA","Michaels"],"lines":["IKEA DALSK\u00c4RR","IKEA EDSBRUK","IKEA KNOPP\u00c4NG","IKEA SILVERH\u00d6JDEN"],"more":13,"mat":{"print":[5,7],"open":[4.5,6.5],"est":["IKEA DALSK\u00c4RR","IKEA EDSBRUK","IKEA KNOPP\u00c4NG","Michaels Studio D\u00e9cor - Aspect Black Frame with Mat","Michaels Studio D\u00e9cor - Aspect Rustic Narrow Frame With Mat","Michaels Studio D\u00e9cor - Belmont Frame with Mat","Michaels Studio D\u00e9cor - Expressions\u2122 Gold Sydney Frame with Mat","Michaels Studio D\u00e9cor - Expressions\u2122 Silver Two Tone Frame with Mat","Michaels Studio D\u00e9cor - Gallery Black Frame with Double Mat","Michaels Studio D\u00e9cor - Gallery\u2122 Walnut & Gold Trim Frame with Mat","Michaels Studio D\u00e9cor - Lifestyles\u2122 Black Frame With Mat","Michaels Studio D\u00e9cor - Lifestyles\u2122 White Frame With Mat"]}},
+  {"pic":[8,10],"cm":[20,25],"sup":["IKEA"],"lines":["IKEA KLOTK\u00d6RSB\u00c4R","IKEA KNOPP\u00c4NG","IKEA LOMVIKEN","IKEA R\u00d6DALM"],"mat":{"print":[5,7],"open":[4.75,6.75],"est":[],"printCm":[13,18],"openCm":[12,17]}},
+  {"pic":[8.5,11],"cm":[21.6,27.9],"sup":["Michaels"],"lines":["Michaels Studio D\u00e9cor - Aspect 8.5\" x 11\" Gold Narrow Frame","Michaels Studio D\u00e9cor - Aspect 8.5\" x 11\" White Narrow Frame","Michaels Studio D\u00e9cor - Aspect Black Narrow Frame","Michaels Studio D\u00e9cor - Aspect Rustic Narrow Frame"],"more":3},
+  {"pic":[9.75,9.75],"cm":[25,25],"sup":["IKEA"],"lines":["IKEA SANNAHED"],"mat":{"print":[5,5],"open":[4.75,4.75],"est":[],"printCm":[13,13],"openCm":[12,12]}},
+  {"pic":[8,12],"cm":[20.3,30.5],"sup":["Michaels"],"lines":["Michaels Studio D\u00e9cor - Aspect Black Narrow Frame","Michaels Studio D\u00e9cor - Basics Black Frame","Michaels Studio D\u00e9cor - Home Studio Black Frame"]},
+  {"pic":[8.25,11.75],"cm":[21,30],"sup":["IKEA"],"lines":["IKEA YLLEVAD"]},
+  {"pic":[9,12],"cm":[22.9,30.5],"sup":["Michaels"],"lines":["Michaels Studio D\u00e9cor - Aspect Rustic Narrow Frame","Michaels Studio D\u00e9cor - Basics Black Frame","Michaels Studio D\u00e9cor - Basics Clip Frame","Michaels Studio D\u00e9cor - Home 9\" x 12\" Gold Fredrick Frame with Mat"],"more":3},
+  {"pic":[9.75,11.75],"cm":[24.8,29.8],"sup":["Hobby Lobby"],"lines":["Hobby Lobby Scalloped Wood Picture Frame"],"mat":{"print":[8,10],"open":[7.5,9.5],"est":["Hobby Lobby Scalloped Wood Picture Frame"]}},
+  {"pic":[10,13],"cm":[25.4,33],"sup":["Michaels"],"lines":["Michaels Studio D\u00e9cor - Expressions\u2122 Gold Round Corner Aluminum Frame with Mat by Studio Decor\u00ae"],"mat":{"print":[5,7],"open":[4.5,6.5],"est":["Michaels Studio D\u00e9cor - Expressions\u2122 Gold Round Corner Aluminum Frame with Mat by Studio Decor\u00ae"]}},
+  {"pic":[10,13],"cm":[25.4,33],"sup":["Michaels"],"lines":["Michaels Studio D\u00e9cor - Lifestyles\u2122 Black Frame With Mat","Michaels Studio D\u00e9cor - Lifestyles\u2122 White Frame With Mat"],"mat":{"print":[8,10],"open":[7.5,9.5],"est":["Michaels Studio D\u00e9cor - Lifestyles\u2122 Black Frame With Mat","Michaels Studio D\u00e9cor - Lifestyles\u2122 White Frame With Mat"]}},
+  {"pic":[10,13],"cm":[25.4,33],"sup":["Michaels"],"lines":["Michaels Studio D\u00e9cor - Lifestyles\u2122 Black Frame With Mat"],"mat":{"print":[8.5,11],"open":[8.0,10.5],"est":["Michaels Studio D\u00e9cor - Lifestyles\u2122 Black Frame With Mat"]}},
+  {"pic":[11,13],"cm":[27.9,33],"sup":["Michaels"],"lines":["Michaels Studio D\u00e9cor - Expressions\u2122 Gold Sydney Frame with Mat"],"mat":{"print":[8,10],"open":[7.5,9.5],"est":["Michaels Studio D\u00e9cor - Expressions\u2122 Gold Sydney Frame with Mat"]}},
+  {"pic":[12,12],"cm":[30.5,30.5],"sup":["Michaels"],"lines":["Michaels Studio D\u00e9cor - Basics Black Frame","Michaels Studio D\u00e9cor - Home Studio Black Frame"]},
+  {"pic":[9,16],"cm":[22.9,40.6],"sup":["Michaels"],"lines":["Michaels Studio D\u00e9cor - Expressions\u2122 9\" x 16\" Wood Float Frame"]},
+  {"pic":[12,12],"cm":[30.5,30.5],"sup":["Michaels"],"lines":["Michaels Studio D\u00e9cor - Gallery Black Square Wall Frame with Double Mat","Michaels Studio D\u00e9cor - Gallery Champagne Wall Frame with Double Mat","Michaels Studio D\u00e9cor - Gallery White Square Wall Frame with Double Mat","Michaels Studio D\u00e9cor - Gallery\u2122 Walnut & Gold Trim Frame with Mat"],"mat":{"print":[8,8],"open":[7.5,7.5],"est":["Michaels Studio D\u00e9cor - Gallery Black Square Wall Frame with Double Mat","Michaels Studio D\u00e9cor - Gallery Champagne Wall Frame with Double Mat","Michaels Studio D\u00e9cor - Gallery White Square Wall Frame with Double Mat","Michaels Studio D\u00e9cor - Gallery\u2122 Walnut & Gold Trim Frame with Mat"]}},
+  {"pic":[10.5,13.75],"cm":[26.7,34.9],"sup":["Hobby Lobby"],"lines":["Hobby Lobby Black Flat Double Mat Picture Frame"],"mat":{"print":[8,10],"open":[7.5,9.5],"est":["Hobby Lobby Black Flat Double Mat Picture Frame"]}},
+  {"pic":[11,14],"cm":[27.9,35.6],"sup":["Hobby Lobby","Michaels"],"lines":["Hobby Lobby Antique Bronze Wall Frame","Hobby Lobby Black Beveled Edge Wall Frame","Hobby Lobby Black Floating Frame","Hobby Lobby Bronze & Gold Beveled Wall Frame"],"more":21},
+  {"pic":[11,14],"cm":[27.9,35.6],"sup":["Michaels","Target"],"lines":["Michaels Studio D\u00e9cor - Gallery Metallic Gold Scalloped Frame with Mat","Target Threshold - Poster Frame Light Wood"],"mat":{"print":[5,7],"open":[4.5,6.5],"est":["Michaels Studio D\u00e9cor - Gallery Metallic Gold Scalloped Frame with Mat","Target Threshold - Poster Frame Light Wood"]}},
+  {"pic":[11,14],"cm":[27.9,35.6],"sup":["Hobby Lobby"],"lines":["Hobby Lobby Traditional Wall Frames"],"mat":{"print":[7.69,9.69],"open":[7.19,9.19],"est":["Hobby Lobby Traditional Wall Frames"]}},
+  {"pic":[11,14],"cm":[27.9,35.6],"sup":["Michaels","Target"],"lines":["Michaels Studio D\u00e9cor - Aspect Black Frame with Mat","Michaels Studio D\u00e9cor - Aspect Rustic Narrow Frame With Mat","Michaels Studio D\u00e9cor - Basics Black Frame with Mat","Michaels Studio D\u00e9cor - Belmont Frame with Mat"],"more":25,"mat":{"print":[8,10],"open":[7.5,9.5],"est":["Michaels Studio D\u00e9cor - Aspect Black Frame with Mat","Michaels Studio D\u00e9cor - Aspect Rustic Narrow Frame With Mat","Michaels Studio D\u00e9cor - Basics Black Frame with Mat","Michaels Studio D\u00e9cor - Belmont Frame with Mat","Michaels Studio D\u00e9cor - Gallery Black Wall Frame with Double Mat","Michaels Studio D\u00e9cor - Gallery Champagne Wall Frame with Double Mat","Michaels Studio D\u00e9cor - Gallery Metallic Gold Scooped Frame with Mat","Michaels Studio D\u00e9cor - Gallery Wall Frame with Black Double Mat","Michaels Studio D\u00e9cor - Gallery Wall Frame with Double Mat","Michaels Studio D\u00e9cor - Gallery\u2122 Walnut & Gold Trim Frame with Mat","Michaels Studio D\u00e9cor - Home Black Rope Frame with Mat","Michaels Studio D\u00e9cor - Home Black Studio Frame with Mat","Michaels Studio D\u00e9cor - Home Bronze Frame with Double Mat","Michaels Studio D\u00e9cor - Home Mirrored Frame with Mat","Michaels Studio D\u00e9cor - Home Natural Brown Wall Frame with Linen Mat","Michaels Studio D\u00e9cor - Home Natural Walnut Stain Wood Frame with Mat","Michaels Studio D\u00e9cor - Home Silver Floral Frame with Mat","Michaels Studio D\u00e9cor - Home Turquoise Wash Frame with Mat","Target Room Essentials - 11\"x14\" Matted to 8\"x10\" Traditional Value Picture Frame","Target Threshold - 11\" x 14\" Matted to 8\" x 10\" Single Picture Gallery Frame","Target Threshold - Thin Gallery Frame with Mat"]}},
+  {"pic":[11,14],"cm":[27.9,35.6],"sup":["Michaels"],"lines":["Michaels Studio D\u00e9cor - Aspect Black Frame with Mat"],"mat":{"print":[8.5,11],"open":[8.0,10.5],"est":["Michaels Studio D\u00e9cor - Aspect Black Frame with Mat"]}},
+  {"pic":[11,14],"cm":[27.9,35.6],"sup":["Michaels"],"lines":["Michaels Studio D\u00e9cor - Home Black Tyler Frame"],"mat":{"print":[8,12],"open":[7.5,11.5],"est":["Michaels Studio D\u00e9cor - Home Black Tyler Frame"]}},
+  {"pic":[11,14],"cm":[27.9,35.6],"sup":["Michaels"],"lines":["Michaels Studio D\u00e9cor - Home Black Tyler Frame"],"mat":{"print":[9,12],"open":[8.5,11.5],"est":["Michaels Studio D\u00e9cor - Home Black Tyler Frame"]}},
+  {"pic":[12.5,12.5],"cm":[32,32],"sup":["IKEA"],"lines":["IKEA LOMVIKEN"],"mat":{"print":[7.75,7.75],"open":[7.5,7.5],"est":[],"printCm":[20,20],"openCm":[19,19]}},
+  {"pic":[11.3,14.4],"cm":[28.7,36.6],"sup":["Target"],"lines":["Target Threshold - Thin Metal Matted Gallery Frame Gold"],"mat":{"print":[5,7],"open":[4.5,6.5],"est":["Target Threshold - Thin Metal Matted Gallery Frame Gold"]}},
+  {"pic":[11,15],"cm":[27.9,38.1],"sup":["Michaels"],"lines":["Michaels Studio D\u00e9cor - Basics Black Frame"]},
+  {"pic":[11,17],"cm":[27.9,43.2],"sup":["Hobby Lobby","Michaels","Target"],"lines":["Hobby Lobby Quick Wall Picture Frame","Michaels Studio D\u00e9cor - Aspect Black Narrow Frame","Michaels Studio D\u00e9cor - Basics Black Frame","Michaels Studio D\u00e9cor - Basics Clip Frame"],"more":5},
+  {"pic":[12,16],"cm":[31,41],"sup":["IKEA","Michaels"],"lines":["IKEA FISKBO","IKEA FISKBO","IKEA H\u00c4CKHAGTORN","Michaels Studio D\u00e9cor - Aspect Black Narrow Frame"],"more":6},
+  {"pic":[12,16],"cm":[31,41],"sup":["IKEA"],"lines":["IKEA EDSBRUK","IKEA KNOPP\u00c4NG","IKEA LOMVIKEN"],"mat":{"print":[8,10],"open":[7,9],"est":[],"printCm":[20,25],"openCm":[19,24]}},
+  {"pic":[12,16],"cm":[31,41],"sup":["IKEA"],"lines":["IKEA KNOPP\u00c4NG","IKEA LOMVIKEN","IKEA PLOMMONTR\u00c4D","IKEA R\u00d6DALM"],"more":2,"mat":{"print":[8,10],"open":[7.5,9.5],"est":["IKEA R\u00d6DALM"],"printCm":[20,25],"openCm":[19,24]}},
+  {"pic":[12.25,16.25],"cm":[31,41],"sup":["IKEA"],"lines":["IKEA KLOTK\u00d6RSB\u00c4R"],"mat":{"print":[7.75,9.75],"open":[7.5,9.5],"est":[],"printCm":[20,25],"openCm":[19,24]}},
+  {"pic":[12,18],"cm":[30.5,45.7],"sup":["Michaels","Target"],"lines":["Michaels Studio D\u00e9cor - Aspect Black Narrow Frame","Michaels Studio D\u00e9cor - Basics Black Frame","Michaels Studio D\u00e9cor - Home Brown with Beaded Edge Wood Wall Frame","Michaels Studio D\u00e9cor - Home Collection Gray Wash Two-Tone Frame"],"more":3},
+  {"pic":[13,19],"cm":[33,48.3],"sup":["Michaels"],"lines":["Michaels Studio D\u00e9cor - Basics Black Frame","Michaels Studio D\u00e9cor - Home Brown & Black Wood Grain Frame","Michaels Studio D\u00e9cor - Home Studio Black Frame"]},
+  {"pic":[13,19],"cm":[33,48.3],"sup":["Michaels"],"lines":["Michaels Studio D\u00e9cor - Lifestyles\u2122 Black Frame With Mat"],"mat":{"print":[11,17],"open":[10.5,16.5],"est":["Michaels Studio D\u00e9cor - Lifestyles\u2122 Black Frame With Mat"]}},
+  {"pic":[14,18],"cm":[35.6,45.7],"sup":["Hobby Lobby","Michaels"],"lines":["Hobby Lobby Gray Wood Wall Frame","Michaels Studio D\u00e9cor - Home Studio Black Frame"]},
+  {"pic":[14,18],"cm":[35.6,45.7],"sup":["Michaels","Target"],"lines":["Michaels Studio D\u00e9cor - Gallery Metallic Gold Scalloped Frame with Mat","Target Threshold - 14\" x 18\" Matted to 8\" x 10\" Thin Gallery Frame","Target Threshold - 14\" x 18\" Matted to 8\" x 10\" Thin Gallery Frame","Target Threshold - Thin Gallery Frame with Mat"],"mat":{"print":[8,10],"open":[7.5,9.5],"est":["Michaels Studio D\u00e9cor - Gallery Metallic Gold Scalloped Frame with Mat","Target Threshold - 14\" x 18\" Matted to 8\" x 10\" Thin Gallery Frame","Target Threshold - Thin Gallery Frame with Mat"]}},
+  {"pic":[14,18],"cm":[35.6,45.7],"sup":["Michaels"],"lines":["Michaels Studio D\u00e9cor - Gallery Black Wall Frame with Double Mat","Michaels Studio D\u00e9cor - Gallery Champagne Wall Frame with Double Mat","Michaels Studio D\u00e9cor - Gallery Wall Frame with Black Double Mat","Michaels Studio D\u00e9cor - Gallery Wall Frame with Double Mat"],"mat":{"print":[10,13],"open":[9.5,12.5],"est":["Michaels Studio D\u00e9cor - Gallery Black Wall Frame with Double Mat","Michaels Studio D\u00e9cor - Gallery Champagne Wall Frame with Double Mat","Michaels Studio D\u00e9cor - Gallery Wall Frame with Black Double Mat","Michaels Studio D\u00e9cor - Gallery Wall Frame with Double Mat"]}},
+  {"pic":[14,18],"cm":[35.6,45.7],"sup":["Hobby Lobby","Michaels"],"lines":["Hobby Lobby Black Certificate Frame","Michaels Studio D\u00e9cor - Aspect Black Frame with Mat","Michaels Studio D\u00e9cor - Lifestyles\u2122 Black Frame With Mat","Michaels Studio D\u00e9cor - Lifestyles\u2122 White Frame With Mat"],"mat":{"print":[11,14],"open":[10.5,13.5],"est":["Hobby Lobby Black Certificate Frame","Michaels Studio D\u00e9cor - Aspect Black Frame with Mat","Michaels Studio D\u00e9cor - Lifestyles\u2122 Black Frame With Mat","Michaels Studio D\u00e9cor - Lifestyles\u2122 White Frame With Mat"]}},
+  {"pic":[16,16],"cm":[40.6,40.6],"sup":["Target"],"lines":["Target Threshold - Elevated Aluminum Poster Frame Black"],"mat":{"print":[12,12],"open":[11.5,11.5],"est":["Target Threshold - Elevated Aluminum Poster Frame Black"]}},
+  {"pic":[14.4,18.4],"cm":[36.6,46.7],"sup":["Target"],"lines":["Target Threshold - Thin Metal Matted Gallery Frame Gold"],"mat":{"print":[8,10],"open":[7.5,9.5],"est":["Target Threshold - Thin Metal Matted Gallery Frame Gold"]}},
+  {"pic":[15,21],"cm":[38.1,53.3],"sup":["Michaels"],"lines":["Michaels Studio D\u00e9cor - Home Black Tyler Frame"],"mat":{"print":[11,17],"open":[10.5,16.5],"est":["Michaels Studio D\u00e9cor - Home Black Tyler Frame"]}},
+  {"pic":[15,21],"cm":[38.1,53.3],"sup":["Michaels"],"lines":["Michaels Studio D\u00e9cor - Lifestyles\u2122 Black Frame With Mat"],"mat":{"print":[12,18],"open":[11.5,17.5],"est":["Michaels Studio D\u00e9cor - Lifestyles\u2122 Black Frame With Mat"]}},
+  {"pic":[16,20],"cm":[41,51],"sup":["Hobby Lobby","IKEA","Michaels","Target"],"lines":["Hobby Lobby Bronze & Gold Beveled Wall Frame","Hobby Lobby Brown Beveled Wood Wall Frame","Hobby Lobby Gold Beveled Wall Frame","Hobby Lobby Gold Edge Wood Wall Frame"],"more":27},
+  {"pic":[16,20],"cm":[40.6,50.8],"sup":["Target"],"lines":["Target Threshold - Poster Frame Light Wood"],"mat":{"print":[8,10],"open":[7.5,9.5],"est":["Target Threshold - Poster Frame Light Wood"]}},
+  {"pic":[16,20],"cm":[40.6,50.8],"sup":["Michaels","Target"],"lines":["Michaels Studio D\u00e9cor - Basics Black Frame with Mat","Michaels Studio D\u00e9cor - Belmont Frame with Mat","Michaels Studio D\u00e9cor - Belmont Frame with Mat","Michaels Studio D\u00e9cor - Belmont Frame with Mat"],"more":21,"mat":{"print":[11,14],"open":[10.5,13.5],"est":["Michaels Studio D\u00e9cor - Basics Black Frame with Mat","Michaels Studio D\u00e9cor - Belmont Frame with Mat","Michaels Studio D\u00e9cor - Gallery Black Wall Frame with Double Mat","Michaels Studio D\u00e9cor - Gallery Champagne Wall Frame with Double Mat","Michaels Studio D\u00e9cor - Gallery Metallic Gold Scooped Frame with Mat","Michaels Studio D\u00e9cor - Gallery Wall Frame with Black Double Mat","Michaels Studio D\u00e9cor - Gallery Wall Frame with Double Mat","Michaels Studio D\u00e9cor - Gallery\u2122 Walnut & Gold Trim Frame with Mat","Michaels Studio D\u00e9cor - Home Black Rope Frame with Mat","Michaels Studio D\u00e9cor - Home Black Studio Frame with Mat","Michaels Studio D\u00e9cor - Home Bronze Frame with Double Mat","Michaels Studio D\u00e9cor - Home Bronze Triple Beaded Frame with Mat","Michaels Studio D\u00e9cor - Home Champagne Gold Frame with Beveled Mat","Michaels Studio D\u00e9cor - Home Mirrored Frame with Mat","Michaels Studio D\u00e9cor - Home Natural Brown Wall Frame with Linen Mat","Michaels Studio D\u00e9cor - Home Natural Walnut Stain Wood Frame with Mat","Michaels Studio D\u00e9cor - Home Silver Floral Frame with Mat","Michaels Studio D\u00e9cor - Home Turquoise Wash Frame with Mat","Michaels Studio D\u00e9cor - Lifestyles\u2122 Black Large Frame with Mat","Target Threshold - 16\" x 20\" Matted to 11\" x 14\" Thin Gallery Frame"]}},
+  {"pic":[16,20],"cm":[41,51],"sup":["IKEA"],"lines":["IKEA EDSBRUK"],"mat":{"print":[12,16],"open":[11,15],"est":[],"printCm":[31,41],"openCm":[29,39]}},
+  {"pic":[16,20],"cm":[41,51],"sup":["IKEA"],"lines":["IKEA KLOTK\u00d6RSB\u00c4R","IKEA KNOPP\u00c4NG","IKEA R\u00d6DALM"],"mat":{"print":[12,16],"open":[11.75,15.75],"est":[],"printCm":[31,41],"openCm":[30,40]}},
+  {"pic":[16,20],"cm":[41,51],"sup":["IKEA","Michaels"],"lines":["IKEA KNOPP\u00c4NG","IKEA LOMVIKEN","IKEA SILVERH\u00d6JDEN","Michaels Studio D\u00e9cor - Home Black Tyler Frame"],"mat":{"print":[12,16],"open":[11.5,15.5],"est":["IKEA KNOPP\u00c4NG","Michaels Studio D\u00e9cor - Home Black Tyler Frame"]}},
+  {"pic":[18,18],"cm":[45.7,45.7],"sup":["Michaels"],"lines":["Michaels Studio D\u00e9cor - Gallery Black Square Wall Frame with Double Mat","Michaels Studio D\u00e9cor - Gallery White Square Wall Frame with Double Mat"],"mat":{"print":[8,10],"open":[7.5,9.5],"est":["Michaels Studio D\u00e9cor - Gallery Black Square Wall Frame with Double Mat","Michaels Studio D\u00e9cor - Gallery White Square Wall Frame with Double Mat"]}},
+  {"pic":[16.4,20.4],"cm":[41.7,51.8],"sup":["Target"],"lines":["Target Threshold - Thin Metal Matted Gallery Frame Gold"],"mat":{"print":[11,14],"open":[10.5,13.5],"est":["Target Threshold - Thin Metal Matted Gallery Frame Gold"]}},
+  {"pic":[16,22],"cm":[40.6,55.9],"sup":["Michaels"],"lines":["Michaels Studio D\u00e9cor - Home Black Tyler Frame","Michaels Studio D\u00e9cor - Home Natural Walnut Stain Wood Frame with Mat"],"mat":{"print":[12,18],"open":[11.5,17.5],"est":["Michaels Studio D\u00e9cor - Home Black Tyler Frame","Michaels Studio D\u00e9cor - Home Natural Walnut Stain Wood Frame with Mat"]}},
+  {"pic":[16,24],"cm":[40.6,61],"sup":["Michaels"],"lines":["Michaels Studio D\u00e9cor - Home Brown with Beaded Edge Wood Wall Frame","Michaels Studio D\u00e9cor - Home Studio Black Frame","Michaels Studio D\u00e9cor - Poster Frame","Michaels Studio D\u00e9cor - Ventura\u2122 Poster Frame"]},
+  {"pic":[16,24],"cm":[40.6,61],"sup":["Michaels"],"lines":["Michaels Studio D\u00e9cor - Home Black Tyler Frame"],"mat":{"print":[13,19],"open":[12.5,18.5],"est":["Michaels Studio D\u00e9cor - Home Black Tyler Frame"]}},
+  {"pic":[19.75,19.75],"cm":[50,50],"sup":["IKEA"],"lines":["IKEA SANNAHED"],"mat":{"print":[11.75,11.75],"open":[11.5,11.5],"est":[],"printCm":[30,30],"openCm":[29,29]}},
+  {"pic":[11.75,36],"cm":[29.8,91.4],"sup":["Hobby Lobby"],"lines":["Hobby Lobby Rustic Barnwood Wall Frame"]},
+  {"pic":[18,24],"cm":[45.7,61],"sup":["Hobby Lobby","Michaels","Target"],"lines":["Hobby Lobby Black Wall Frame","Hobby Lobby Black Wood Wall Frame","Michaels Studio D\u00e9cor - 18\" x 24\" Black Wood Frame with Mat, Home","Michaels Studio D\u00e9cor - Belmont Frame"],"more":11},
+  {"pic":[18,24],"cm":[45.7,61],"sup":["Michaels"],"lines":["Michaels Studio D\u00e9cor - Lifestyles\u2122 Black Large Frame with Mat"],"mat":{"print":[13,19],"open":[12.5,18.5],"est":["Michaels Studio D\u00e9cor - Lifestyles\u2122 Black Large Frame with Mat"]}},
+  {"pic":[20,24],"cm":[50.8,61],"sup":["Michaels"],"lines":["Michaels Studio D\u00e9cor - Home Studio Black Frame"]},
+  {"pic":[20,24],"cm":[50.8,61],"sup":["Michaels"],"lines":["Michaels Studio D\u00e9cor - Gallery Black Wall Frame with Double Mat","Michaels Studio D\u00e9cor - Gallery\u2122 Walnut & Gold Trim Frame with Mat","Michaels Studio D\u00e9cor - Home Black Rope Frame with Mat","Michaels Studio D\u00e9cor - Home Black Studio Frame with Mat"],"more":5,"mat":{"print":[16,20],"open":[15.5,19.5],"est":["Michaels Studio D\u00e9cor - Gallery Black Wall Frame with Double Mat","Michaels Studio D\u00e9cor - Gallery\u2122 Walnut & Gold Trim Frame with Mat","Michaels Studio D\u00e9cor - Home Black Rope Frame with Mat","Michaels Studio D\u00e9cor - Home Black Studio Frame with Mat","Michaels Studio D\u00e9cor - Home Bronze Frame with Double Mat","Michaels Studio D\u00e9cor - Home Bronze Triple Beaded Frame with Mat","Michaels Studio D\u00e9cor - Home Champagne Gold Frame with Beveled Mat","Michaels Studio D\u00e9cor - Home Natural Walnut Stain Wood Frame with Mat","Michaels Studio D\u00e9cor - Home Silver Floral Frame with Mat"]}},
+  {"pic":[13.5,40],"cm":[34.3,101.6],"sup":["Michaels"],"lines":["Michaels Studio D\u00e9cor - Stockholm\u2122 Black Poster Frame"]},
+  {"pic":[19.75,27.5],"cm":[50,70],"sup":["IKEA"],"lines":["IKEA FISKBO"]},
+  {"pic":[19.75,27.5],"cm":[50,70],"sup":["IKEA"],"lines":["IKEA EDSBRUK","IKEA KLOTK\u00d6RSB\u00c4R","IKEA KNOPP\u00c4NG","IKEA LOMVIKEN"],"more":2,"mat":{"print":[15.75,19.75],"open":[15.25,19.25],"est":[],"printCm":[40,50],"openCm":[39,49]}},
+  {"pic":[20,28],"cm":[50.8,71.1],"sup":["Michaels"],"lines":["Michaels Studio D\u00e9cor - Home Studio Black Frame","Michaels Studio D\u00e9cor - Poster Frame","Michaels Studio D\u00e9cor - Styleline\u2122 Black Poster Frame"]},
+  {"pic":[23.75,23.75],"cm":[60.3,60.3],"sup":["Hobby Lobby"],"lines":["Hobby Lobby Mat Portrait Wall Frame"],"mat":{"print":[12,12],"open":[11.5,11.5],"est":["Hobby Lobby Mat Portrait Wall Frame"]}},
+  {"pic":[20,30],"cm":[50.8,76.2],"sup":["Michaels"],"lines":["Michaels Studio D\u00e9cor - Home Brown with Beaded Edge Wood Wall Frame","Michaels Studio D\u00e9cor - Home Studio Black Frame","Michaels Studio D\u00e9cor - Poster Frame","Michaels Studio D\u00e9cor - Ventura\u2122 Poster Frame"]},
+  {"pic":[20,30],"cm":[50.8,76.2],"sup":["Target"],"lines":["Target Threshold - Poster Frame Light Wood"],"mat":{"print":[11,14],"open":[10.5,13.5],"est":["Target Threshold - Poster Frame Light Wood"]}},
+  {"pic":[22,28],"cm":[55.9,71.1],"sup":["Michaels"],"lines":["Michaels Studio D\u00e9cor - Home Brown & Black Wood Grain Frame","Michaels Studio D\u00e9cor - Home Studio Black Frame","Michaels Studio D\u00e9cor - Poster Frame"]},
+  {"pic":[22,28],"cm":[55.9,71.1],"sup":["Target"],"lines":["Target Threshold - Elevated Aluminum Poster Frame Black"],"mat":{"print":[18,24],"open":[17.5,23.5],"est":["Target Threshold - Elevated Aluminum Poster Frame Black"]}},
+  {"pic":[24,30],"cm":[61,76.2],"sup":["Michaels"],"lines":["Michaels Studio D\u00e9cor - Home Studio Black Frame"]},
+  {"pic":[24,30],"cm":[61,76.2],"sup":["Michaels"],"lines":["Michaels Studio D\u00e9cor - Gallery Black Wall Frame with Double Mat","Michaels Studio D\u00e9cor - Home Bronze Triple Beaded Frame with Mat","Michaels Studio D\u00e9cor - Home Champagne Gold Frame with Beveled Mat","Michaels Studio D\u00e9cor - Home Natural Walnut Stain Wood Frame with Mat"],"mat":{"print":[18,24],"open":[17.5,23.5],"est":["Michaels Studio D\u00e9cor - Gallery Black Wall Frame with Double Mat","Michaels Studio D\u00e9cor - Home Bronze Triple Beaded Frame with Mat","Michaels Studio D\u00e9cor - Home Champagne Gold Frame with Beveled Mat","Michaels Studio D\u00e9cor - Home Natural Walnut Stain Wood Frame with Mat"]}},
+  {"pic":[22.375,34],"cm":[56.8,86.4],"sup":["Michaels"],"lines":["Michaels Studio D\u00e9cor - Belmont Frame","Michaels Studio D\u00e9cor - Poster Frame","Michaels Studio D\u00e9cor - Styleline\u2122 Black Poster Frame"]},
+  {"pic":[24,32],"cm":[61,81.3],"sup":["Michaels"],"lines":["Michaels Studio D\u00e9cor - Poster Frame"]},
+  {"pic":[24,35.75],"cm":[61,91],"sup":["IKEA"],"lines":["IKEA KNOPP\u00c4NG","IKEA LOMVIKEN","IKEA SILVERH\u00d6JDEN"],"mat":{"print":[19.75,27.5],"open":[19.25,27.25],"est":[],"printCm":[50,70],"openCm":[49,69]}},
+  {"pic":[24,36],"cm":[61,91.4],"sup":["Hobby Lobby","Michaels"],"lines":["Hobby Lobby Black Scoop Wall Frame","Hobby Lobby Black Wood Wall Frame","Hobby Lobby Black Wood Wall Frame","Hobby Lobby Brown Beveled Wood Wall Frame"],"more":15},
+  {"pic":[24,36],"cm":[61,91.4],"sup":["Michaels"],"lines":["Michaels Studio D\u00e9cor - Lifestyles\u2122 Black Large Frame with Mat"],"mat":{"print":[18,24],"open":[17.5,23.5],"est":["Michaels Studio D\u00e9cor - Lifestyles\u2122 Black Large Frame with Mat"]}},
+  {"pic":[24,36],"cm":[61,91],"sup":["IKEA"],"lines":["IKEA R\u00d6DALM","IKEA R\u00d6DALM"],"mat":{"print":[19.75,27.5],"open":[19.25,27.25],"est":[],"printCm":[50,70],"openCm":[49,69]}},
+  {"pic":[27.5,39.25],"cm":[70,100],"sup":["IKEA"],"lines":["IKEA R\u00d6DALM"],"mat":{"print":[19.75,27.5],"open":[19.25,27.25],"est":[],"printCm":[50,70],"openCm":[49,69]}},
+  {"pic":[27,40],"cm":[68.6,101.6],"sup":["Michaels"],"lines":["Michaels Studio D\u00e9cor - Poster Frame","Michaels Studio D\u00e9cor - Stockholm\u2122 Black Poster Frame"]},
+  {"pic":[27,40],"cm":[68.6,101.6],"sup":["Michaels"],"lines":["Michaels Studio D\u00e9cor - Home Black Flat Frame with Beveled Mat"],"mat":{"print":[24,36],"open":[23.5,35.5],"est":["Michaels Studio D\u00e9cor - Home Black Flat Frame with Beveled Mat"]}},
+  {"pic":[27.5,39.5],"cm":[69.8,100.3],"sup":["Target"],"lines":["Target Threshold - Elevated Aluminum Poster Frame Black"],"mat":{"print":[24,36],"open":[23.5,35.5],"est":["Target Threshold - Elevated Aluminum Poster Frame Black"]}},
+
 ];
-const ikeaEntry = key => /^ikea:\d+$/.test(key || '') ? IKEA_FRAMES[+key.slice(5)] : null;
+const storeEntry = key => /^store:\d+$/.test(key || '') ? STORE_FRAMES[+key.split(':')[1]] : null;
 function fracIn(v) {
   const whole = Math.floor(v + 1e-9), f = +(v - whole).toFixed(3);
   const sym = { 0: '', 0.25: '¼', 0.5: '½', 0.75: '¾', 0.125: '⅛', 0.375: '⅜', 0.625: '⅝', 0.875: '⅞' }[f];
   return sym === undefined ? String(+v.toFixed(3)) : (whole || !sym ? String(whole) : '') + sym;
 }
-function ikeaSize(pair, cmPair) {
+function storeSize(pair, cmPair) {
   if (S.unit === 'cm') return cmPair ? `${cmPair[0]} × ${cmPair[1]} cm` : `${trimNum(pair[0] * 2.54, 1)} × ${trimNum(pair[1] * 2.54, 1)} cm`;
   return `${fracIn(pair[0])} × ${fracIn(pair[1])} in`;
 }
-function ikeaLabel(e) {
-  const size = ikeaSize(e.pic, e.cm);
-  const mat = e.mat ? ` · mat for ${ikeaSize(e.mat.print, e.mat.printCm).replace(/ (in|cm)$/, '')} (opening ${ikeaSize(e.mat.open, e.mat.openCm).replace(/ (in|cm)$/, '')})` : ' · no mat';
-  return `${size}${mat} · ${e.lines.join(', ')}`;
+function storeLabel(e) {
+  const size = storeSize(e.pic, e.cm);
+  const mat = e.mat ? ` · mat for ${storeSize(e.mat.print, e.mat.printCm).replace(/ (in|cm)$/, '')} (opening ${storeSize(e.mat.open, e.mat.openCm).replace(/ (in|cm)$/, '')})` : ' · no mat';
+  return `${size}${mat} · ${e.lines.join(', ')}${e.more ? ` +${e.more} more` : ''}`;
 }
 const sameDims = (a, b) => Math.abs(Math.min(a[0], a[1]) - Math.min(b[0], b[1])) < 0.01 && Math.abs(Math.max(a[0], a[1]) - Math.max(b[0], b[1])) < 0.01;
 const PRESET_GROUPS = ['Standard', 'Square', 'Large', 'Panoramic', 'Metric'];
@@ -1573,7 +1644,7 @@ function loadSettings() {
   if (!['frame', 'mat'].includes(S.mode)) S.mode = 'frame';
   if (!['frame', 'print'].includes(S.dir)) S.dir = 'frame';
   if (typeof S.frameAuto !== 'boolean') S.frameAuto = true;
-  if (!ikeaEntry(S.framePick)) S.framePick = null;
+  if (!storeEntry(S.framePick)) S.framePick = null;
   if (!['portrait', 'landscape'].includes(S.orient)) S.orient = 'portrait';
   if (!okSz(S.frame)) S.frame = oriented(8, 10);
   if (!okSz(S.print)) S.print = oriented(5, 7);
@@ -1803,9 +1874,9 @@ function fillPresetSelect(sel, withIkea) {
     sel.appendChild(g);
   }
   if (withIkea) {
-    const g = document.createElement('optgroup'); g.label = 'IKEA frames (US)';
-    IKEA_FRAMES.forEach((e, i) => {
-      const o = document.createElement('option'); o.value = 'ikea:' + i; o.textContent = ikeaLabel(e); g.appendChild(o);
+    const g = document.createElement('optgroup'); g.label = 'Store frames (US)';
+    STORE_FRAMES.forEach((e, i) => {
+      const o = document.createElement('option'); o.value = 'store:' + i; o.textContent = storeLabel(e); g.appendChild(o);
     });
     sel.appendChild(g);
   }
@@ -1828,7 +1899,7 @@ function syncSetupUI() {
   setIf('matW', fmtValU(S.mat.w, um)); setIf('matH', fmtValU(S.mat.h, um));
   setIf('printW', fmtValU(S.print.w, up)); setIf('printH', fmtValU(S.print.h, up));
   setIf('lip', fmtValU(S.lip, ul));
-  const ik = ikeaEntry(S.framePick);
+  const ik = storeEntry(S.framePick);
   const ikActive = ik && sameDims(ik.pic, [S.frame.w, S.frame.h]);
   if (!ikActive) S.framePick = null;
   const fp = presetFor(S.frame); $('framePreset').value = ikActive ? S.framePick : fp ? fp.key : 'custom';
@@ -1853,8 +1924,8 @@ function syncSetupUI() {
   }
   if (ikActive) {
     const est = ik.mat && ik.mat.est.length ? ` IKEA lists ${ik.mat.est.join(', ')}’s mat opening as the full photo size, so a ¼″ overlap per side is assumed.` : '';
-    $('frameHint').textContent = `IKEA ${ik.lines.join(', ')}. Frame opening ${ikeaSize(ik.pic, ik.cm)}` +
-      (ik.mat ? `; its mat takes a ${ikeaSize(ik.mat.print, ik.mat.printCm)} print (opening ${ikeaSize(ik.mat.open, ik.mat.openCm)}).${est}` : ', no mat included.');
+    $('frameHint').textContent = `${ik.sup.join(' / ')} — ${ik.lines.join(', ')}. Frame opening ${storeSize(ik.pic, ik.cm)}` +
+      (ik.mat ? `; its mat takes a ${storeSize(ik.mat.print, ik.mat.printCm)} print (opening ${storeSize(ik.mat.open, ik.mat.openCm)}).${est}` : ', no mat included.');
   }
   $('frameAuto').hidden = !(mat && fromPrint && !S.frameAuto);
   // The largest-sharp-size button sits under whichever size leads.
@@ -1886,21 +1957,21 @@ function syncSetupUI() {
   for (const e of g.errors) box.appendChild(noticeEl('err', e));
   for (const w of g.warnings) box.appendChild(noticeEl('warn', w));
   if (ikActive && ik.mat && !mat)
-    box.appendChild(noticeEl('info', `This IKEA frame comes with a mat for ${ikeaSize(ik.mat.print, ik.mat.printCm)} prints.`,
-      { label: 'Use its mat', run: () => { S.mode = 'mat'; applyIkeaFrame(S.framePick); setupChanged(); } }));
+    box.appendChild(noticeEl('info', `This frame comes with a mat for ${storeSize(ik.mat.print, ik.mat.printCm)} prints.`,
+      { label: 'Use its mat', run: () => { S.mode = 'mat'; applyStoreFrame(S.framePick); setupChanged(); } }));
   if (mat && fromPrint && S.print.w > 0) {
-    const fits = IKEA_FRAMES.map((e, i) => ({ e, i })).filter(({ e }) => e.mat && sameDims(e.mat.print, [S.print.w, S.print.h]));
+    const fits = STORE_FRAMES.map((e, i) => ({ e, i })).filter(({ e }) => e.mat && sameDims(e.mat.print, [S.print.w, S.print.h]));
     if (fits.length) {
-      const names = fits.map(({ e }) => `${ikeaSize(e.pic, e.cm)} (${e.lines.join(', ')})`).join('; ');
+      const names = fits.map(({ e }) => `${storeSize(e.pic, e.cm)} (${e.lines.join(', ')})`).join('; ');
       const first = fits[0];
-      box.appendChild(noticeEl('info', `IKEA frames with a mat made for this print: ${esc(names)}.`,
-        ikActive ? null : { label: `Use IKEA ${ikeaSize(first.e.pic, first.e.cm)}`, run: () => { applyIkeaFrame('ikea:' + first.i); setupChanged(); } }));
+      box.appendChild(noticeEl('info', `Store frames with a mat made for this print: ${esc(names)}.`,
+        ikActive ? null : { label: `Use ${first.e.sup[0]} ${storeSize(first.e.pic, first.e.cm)}`, run: () => { applyStoreFrame('store:' + first.i); setupChanged(); } }));
     }
   }
 }
 // Choosing an IKEA frame sets the frame, and in mat mode its mat opening and intended print.
-function applyIkeaFrame(key) {
-  const e = ikeaEntry(key); if (!e) return;
+function applyStoreFrame(key) {
+  const e = storeEntry(key); if (!e) return;
   S.frame = oriented(e.pic[0], e.pic[1]);
   S.framePick = key;
   if (S.dir === 'print' && S.mode === 'mat') S.frameAuto = false;
@@ -1975,7 +2046,7 @@ function initSetup() {
   }));
   document.querySelectorAll('input[name="orient"]').forEach(r => r.addEventListener('change', () => { setOrientation(r.value); setupChanged(); }));
   $('framePreset').addEventListener('change', e => {
-    if (ikeaEntry(e.target.value)) { applyIkeaFrame(e.target.value); setupChanged(); return; }
+    if (storeEntry(e.target.value)) { applyStoreFrame(e.target.value); setupChanged(); return; }
     const p = PRESETS.find(x => x.key === e.target.value); if (!p) return;
     S.frame = oriented(p.w, p.h); S.framePick = null;
     if (S.dir === 'print' && S.mode === 'mat') S.frameAuto = false;
@@ -3420,13 +3491,13 @@ async function runSyntheticTests() {
 
   // IKEA frame data: every mat window sits inside its print, which fits in the frame
   await t(async () => {
-    const bad = IKEA_FRAMES.filter(e => {
+    const bad = STORE_FRAMES.filter(e => {
       if (!(e.pic[0] > 0 && e.pic[1] > 0)) return true;
       if (!e.mat) return false;
       const [pw, ph] = [...e.mat.print].sort((a, b) => a - b), [ow, oh] = [...e.mat.open].sort((a, b) => a - b), [fw, fh] = [...e.pic].sort((a, b) => a - b);
       return !(ow < pw && oh < ph && pw <= fw && ph <= fh);
     });
-    log(`${bad.length ? 'FAIL' : 'PASS'}  IKEA frame data: ${IKEA_FRAMES.length} frames checked${bad.length ? `, bad: ${bad.map(e => e.lines.join('/') + ' ' + e.pic.join('×')).join('; ')}` : ''}`);
+    log(`${bad.length ? 'FAIL' : 'PASS'}  Store frame data: ${STORE_FRAMES.length} frames checked${bad.length ? `, bad: ${bad.map(e => e.lines.join('/') + ' ' + e.pic.join('×')).join('; ')}` : ''}`);
     return !bad.length;
   });
 
