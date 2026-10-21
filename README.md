@@ -24,6 +24,8 @@ It is hosted on GitHub Pages at <https://sheltonsamuele-hue.github.io/photo-fram
 A claude.ai artifact link is **not** suitable: artifact pages block downloads, so saving wouldn't work.
 
 ## Developer tests
+Run these before pushing to `main`: GitHub Pages publishes whatever is there.
+
 Open `index.html#debug` (or add `?debug` to the hosted URL) and use the test panel:
 
 - **Run synthetic tests:** renders noise images in Fit and Fill across several frame setups. For each PNG, it checks that the photo region is pixel-identical to the decoded source, that the `pHYs` DPI and the border color are correct, and that no resampling `drawImage` call happens. It also checks EXIF orientation handling, JPEG JFIF density, EXIF preservation, the canvas size limit, the ZIP writer, and the ARW decoder (using a synthetic ARW file).

@@ -332,6 +332,8 @@ details summary{cursor:pointer;padding:16px 20px;min-height:44px;font-size:.74re
       <div class="field" id="frameField">
         <span class="lbl" id="frameLbl">Frame opening</span>
         <select id="framePreset" aria-labelledby="frameLbl"></select>
+        <select id="storeName" aria-label="Store"></select>
+        <select id="storeFrame" aria-label="Store frame size" hidden></select>
         <div class="dims">
           <input type="text" inputmode="decimal" id="frameW" aria-label="Frame width">
           <span class="x">×</span>
@@ -1612,7 +1614,7 @@ function storeSize(pair, cmPair) {
 function storeLabel(e) {
   const size = storeSize(e.pic, e.cm);
   const mat = e.mat ? ` · mat for ${storeSize(e.mat.print, e.mat.printCm).replace(/ (in|cm)$/, '')} (opening ${storeSize(e.mat.open, e.mat.openCm).replace(/ (in|cm)$/, '')})` : ' · no mat';
-  return `${size}${mat} · ${e.lines.join(', ')}${e.more ? ` +${e.more} more` : ''}`;
+  return size + mat;
 }
 const sameDims = (a, b) => Math.abs(Math.min(a[0], a[1]) - Math.min(b[0], b[1])) < 0.01 && Math.abs(Math.max(a[0], a[1]) - Math.max(b[0], b[1])) < 0.01;
 const PRESET_GROUPS = ['Standard', 'Square', 'Large', 'Panoramic', 'Metric'];
@@ -1862,7 +1864,7 @@ function geometry() {
 }
 
 /* ---- setup UI ---- */
-function fillPresetSelect(sel, withIkea) {
+function fillPresetSelect(sel) {
   sel.innerHTML = '';
   const c = document.createElement('option'); c.value = 'custom'; c.textContent = 'Custom size'; sel.appendChild(c);
   const groups = S.unit === 'cm' ? ['Metric', ...PRESET_GROUPS.filter(g => g !== 'Metric')] : PRESET_GROUPS;
@@ -1873,13 +1875,20 @@ function fillPresetSelect(sel, withIkea) {
     }
     sel.appendChild(g);
   }
-  if (withIkea) {
-    const g = document.createElement('optgroup'); g.label = 'Store frames (US)';
-    STORE_FRAMES.forEach((e, i) => {
-      const o = document.createElement('option'); o.value = 'store:' + i; o.textContent = storeLabel(e); g.appendChild(o);
-    });
-    sel.appendChild(g);
-  }
+}
+// Store frames: pick a store, then one of its sizes. storeName is kept in memory, not saved.
+let storeName = '';
+const STORES = [...new Set(STORE_FRAMES.flatMap(e => e.sup))].sort();
+function fillStoreSelects() {
+  const ns = $('storeName'), fs = $('storeFrame');
+  ns.innerHTML = '<option value="">Store frames (US)…</option>' + STORES.map(n => `<option>${esc(n)}</option>`).join('');
+  ns.value = storeName;
+  fs.innerHTML = '<option value="">Choose a size</option>';
+  STORE_FRAMES.forEach((e, i) => {
+    if (!e.sup.includes(storeName)) return;
+    const o = document.createElement('option'); o.value = 'store:' + i; o.textContent = storeLabel(e); fs.appendChild(o);
+  });
+  fs.hidden = !storeName;
 }
 function presetFor(sz) {
   return PRESETS.find(p => sameSize(oriented(p.w, p.h, orientOf(sz) === 'landscape' ? 'landscape' : 'portrait'), sz));
@@ -1902,7 +1911,9 @@ function syncSetupUI() {
   const ik = storeEntry(S.framePick);
   const ikActive = ik && sameDims(ik.pic, [S.frame.w, S.frame.h]);
   if (!ikActive) S.framePick = null;
-  const fp = presetFor(S.frame); $('framePreset').value = ikActive ? S.framePick : fp ? fp.key : 'custom';
+  const fp = presetFor(S.frame); $('framePreset').value = fp ? fp.key : 'custom';
+  if (ikActive && !ik.sup.includes(storeName)) storeName = ik.sup[0];
+  fillStoreSelects(); $('storeFrame').value = ikActive ? S.framePick : '';
   const pp = presetFor(S.print); $('printPreset').value = pp ? pp.key : 'custom';
   const mat = S.mode === 'mat', fromPrint = S.dir === 'print';
   $('dirFrame').checked = !fromPrint; $('dirPrint').checked = fromPrint;
@@ -1923,7 +1934,7 @@ function syncSetupUI() {
       : 'The size the frame holds, usually the mat board size.';
   }
   if (ikActive) {
-    const est = ik.mat && ik.mat.est.length ? ` IKEA lists ${ik.mat.est.join(', ')}’s mat opening as the full photo size, so a ¼″ overlap per side is assumed.` : '';
+    const est = ik.mat && ik.mat.est.length ? ` For ${ik.mat.est.join(', ')}, the store lists the mat opening as the full photo size, so a ¼″ overlap per side is assumed.` : '';
     $('frameHint').textContent = `${ik.sup.join(' / ')} — ${ik.lines.join(', ')}. Frame opening ${storeSize(ik.pic, ik.cm)}` +
       (ik.mat ? `; its mat takes a ${storeSize(ik.mat.print, ik.mat.printCm)} print (opening ${storeSize(ik.mat.open, ik.mat.openCm)}).${est}` : ', no mat included.');
   }
@@ -1962,7 +1973,7 @@ function syncSetupUI() {
   if (mat && fromPrint && S.print.w > 0) {
     const fits = STORE_FRAMES.map((e, i) => ({ e, i })).filter(({ e }) => e.mat && sameDims(e.mat.print, [S.print.w, S.print.h]));
     if (fits.length) {
-      const names = fits.map(({ e }) => `${storeSize(e.pic, e.cm)} (${e.lines.join(', ')})`).join('; ');
+      const names = [...new Set(fits.map(({ e }) => storeSize(e.pic, e.cm)))].join('; ');
       const first = fits[0];
       box.appendChild(noticeEl('info', `Store frames with a mat made for this print: ${esc(names)}.`,
         ikActive ? null : { label: `Use ${first.e.sup[0]} ${storeSize(first.e.pic, first.e.cm)}`, run: () => { applyStoreFrame('store:' + first.i); setupChanged(); } }));
@@ -2016,12 +2027,12 @@ function setupChanged() {
 }
 
 function initSetup() {
-  fillPresetSelect($('framePreset'), true); fillPresetSelect($('printPreset'));
+  fillPresetSelect($('framePreset')); fillPresetSelect($('printPreset'));
   document.querySelectorAll('input[name="unit"]').forEach(r => r.addEventListener('change', () => {
     S.unit = r.value;
     for (const f of FIELDS) S.units[f] = null; // the page-wide switch resets every field
     if (S.lipAuto) S.lip = DEFAULT_INSET[S.unit];
-    fillPresetSelect($('framePreset'), true); fillPresetSelect($('printPreset'));
+    fillPresetSelect($('framePreset')); fillPresetSelect($('printPreset'));
     setupChanged();
   }));
   document.querySelectorAll('.useg').forEach(g => g.addEventListener('click', e => {
@@ -2046,10 +2057,18 @@ function initSetup() {
   }));
   document.querySelectorAll('input[name="orient"]').forEach(r => r.addEventListener('change', () => { setOrientation(r.value); setupChanged(); }));
   $('framePreset').addEventListener('change', e => {
-    if (storeEntry(e.target.value)) { applyStoreFrame(e.target.value); setupChanged(); return; }
     const p = PRESETS.find(x => x.key === e.target.value); if (!p) return;
     S.frame = oriented(p.w, p.h); S.framePick = null;
     if (S.dir === 'print' && S.mode === 'mat') S.frameAuto = false;
+    setupChanged();
+  });
+  $('storeName').addEventListener('change', e => {
+    storeName = e.target.value;
+    const ik = storeEntry(S.framePick); if (!ik || !ik.sup.includes(storeName)) S.framePick = null;
+    setupChanged();
+  });
+  $('storeFrame').addEventListener('change', e => {
+    if (storeEntry(e.target.value)) applyStoreFrame(e.target.value); else S.framePick = null;
     setupChanged();
   });
   $('printPreset').addEventListener('change', e => {
