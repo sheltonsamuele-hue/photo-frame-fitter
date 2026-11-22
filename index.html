@@ -82,6 +82,7 @@ h1,h2,h3{font-family:var(--f-display);font-weight:400;text-wrap:balance;margin:0
 .seg input:checked + span{background:var(--btn);color:var(--btn-ink)}
 .seg input:focus-visible + span{outline:1px solid var(--focus);outline-offset:2px}
 .seg.full{display:flex}
+@media(max-width:480px){.seg.full span{padding:0 6px;letter-spacing:.06em}}
 .seg.full label{flex:1}
 .seg.full span{width:100%}
 
@@ -323,7 +324,13 @@ details summary{cursor:pointer;padding:16px 20px;min-height:44px;font-size:.74re
         <label><input type="radio" name="fmode" id="modeFrame" value="frame" checked><span>Frame only</span></label>
         <label><input type="radio" name="fmode" id="modeMat" value="mat"><span>Frame + mat</span></label>
       </div>
-      <div class="seg full" role="radiogroup" aria-label="Orientation">
+      <div class="seg full" role="radiogroup" aria-label="Opening shape" aria-describedby="shapeHint">
+        <label><input type="radio" name="shape" id="shRect" value="rect" checked><span>Rectangle</span></label>
+        <label><input type="radio" name="shape" id="shOval" value="oval"><span>Oval</span></label>
+        <label><input type="radio" name="shape" id="shCircle" value="circle"><span>Circle</span></label>
+      </div>
+      <p class="hint" id="shapeHint" hidden></p>
+      <div class="seg full" role="radiogroup" aria-label="Orientation" id="orientSeg">
         <label><input type="radio" name="orient" id="orPortrait" value="portrait" checked><span>Portrait</span></label>
         <label><input type="radio" name="orient" id="orLandscape" value="landscape"><span>Landscape</span></label>
       </div>
@@ -905,7 +912,8 @@ function computeLayout(photo, geo, mode = photo.mode) {
   let sw, sh, dpi;
   if (mode === 'fit') {
     sw = W; sh = H;
-    dpi = Math.max(W / vis.w, H / vis.h);
+    // Oval/circle: the whole photo must sit inside the ellipse, so its diagonal spans the opening.
+    dpi = geo.shape === 'oval' || geo.shape === 'circle' ? Math.hypot(W / vis.w, H / vis.h) : Math.max(W / vis.w, H / vis.h);
   } else {
     const ar = vis.w / vis.h;
     if (W / H > ar) { sh = H; sw = Math.min(W, Math.max(1, Math.round(H * ar))); }
@@ -1626,7 +1634,7 @@ const MAT_MIN_BORDER = 1.5;     // inches of mat per side when a frame is sugges
 
 const S = {
   unit: 'in', units: { frame: null, mat: null, print: null, lip: null, gap: null },
-  dir: 'frame', mode: 'frame', orient: 'portrait',
+  dir: 'frame', mode: 'frame', orient: 'portrait', shape: 'rect',
   frame: { w: 8, h: 10 }, frameAuto: true, framePick: null, lip: 0.25, lipAuto: true,
   mat: { w: 4.5, h: 6.5 }, matAuto: true,
   print: { w: 5, h: 7 }, printAuto: true,
@@ -1645,6 +1653,7 @@ function loadSettings() {
   for (const f of FIELDS) if (!['in', 'cm'].includes(S.units[f])) S.units[f] = null;
   if (!['frame', 'mat'].includes(S.mode)) S.mode = 'frame';
   if (!['frame', 'print'].includes(S.dir)) S.dir = 'frame';
+  if (!['rect', 'oval', 'circle'].includes(S.shape)) S.shape = 'rect';
   if (typeof S.frameAuto !== 'boolean') S.frameAuto = true;
   if (!storeEntry(S.framePick)) S.framePick = null;
   if (!['portrait', 'landscape'].includes(S.orient)) S.orient = 'portrait';
@@ -1860,7 +1869,11 @@ function geometry() {
     if (autoPrintMissing)
       warnings.push(`No standard print size covers this mat window with ${fmtInset(inset())} of overlap per side and still fits the frame. Choose or enter a print size.`);
   }
-  return { print, vis, frame, errors, warnings, ok: errors.length === 0 };
+  // The oval is inscribed in vis. Layout (several photos) keeps rectangles.
+  const shape = layoutOn() ? 'rect' : S.shape;
+  if (shape === 'circle' && !errors.length && Math.abs(vis.w - vis.h) > EPS)
+    errors.push(`A circle needs a square opening, but this one is ${fmtSize(vis)}. Make width and height equal, or choose Oval.`);
+  return { print, vis, frame, shape, errors, warnings, ok: errors.length === 0 };
 }
 
 /* ---- setup UI ---- */
@@ -1902,6 +1915,14 @@ function syncSetupUI() {
   });
   $('modeFrame').checked = S.mode === 'frame'; $('modeMat').checked = S.mode === 'mat';
   $('orPortrait').checked = S.orient === 'portrait'; $('orLandscape').checked = S.orient === 'landscape';
+  $('shRect').checked = S.shape === 'rect'; $('shOval').checked = S.shape === 'oval'; $('shCircle').checked = S.shape === 'circle';
+  $('orientSeg').hidden = S.shape === 'circle';
+  const inLay = layoutOn();
+  document.querySelectorAll('input[name="shape"]').forEach(r => { r.disabled = inLay; });
+  $('shapeHint').hidden = S.shape === 'rect' && !inLay;
+  $('shapeHint').textContent = inLay ? 'Opening shape applies to one photo at a time. Several-photo layouts keep a rectangle.'
+    : S.shape === 'circle' ? 'The print stays a rectangle. The opening is a circle inside it; width and height stay equal.'
+    : 'The print stays a rectangle. The opening is an oval inside it; the corners are hidden by the frame or mat.';
   const setIf = (id, v) => { const el = $(id); if (document.activeElement !== el) el.value = v; };
   const uf = unitOf('frame'), um = unitOf('mat'), up = unitOf('print'), ul = unitOf('lip');
   setIf('frameW', fmtValU(S.frame.w, uf)); setIf('frameH', fmtValU(S.frame.h, uf));
@@ -1967,6 +1988,7 @@ function syncSetupUI() {
   const box = $('setupMsgs'); box.innerHTML = '';
   for (const e of g.errors) box.appendChild(noticeEl('err', e));
   for (const w of g.warnings) box.appendChild(noticeEl('warn', w));
+  if (squareNote) box.appendChild(noticeEl('info', squareNote));
   if (ikActive && ik.mat && !mat)
     box.appendChild(noticeEl('info', `This frame comes with a mat for ${storeSize(ik.mat.print, ik.mat.printCm)} prints.`,
       { label: 'Use its mat', run: () => { S.mode = 'mat'; applyStoreFrame(S.framePick); setupChanged(); } }));
@@ -2017,9 +2039,21 @@ function readDim(idW, idH, target, u) {
   target.h = isNaN(h) ? NaN : fromU(h, u);
 }
 
+// Circle needs equal sides: snap whichever size leads (or the mat window) to its smaller side.
+let squareNote = '';
+function squareUp() {
+  if (S.shape !== 'circle' || layoutOn()) return;
+  let to = null;
+  const sq = o => { const s = Math.min(o.w, o.h); if (!(s > 0) || Math.abs(o.w - o.h) <= EPS) return; o.w = o.h = s; to = o; };
+  sq(S.mode === 'mat' && S.dir === 'print' ? S.print : S.frame);
+  if (S.mode === 'mat' && !S.matAuto) sq(S.mat);
+  if (to) squareNote = `A circle needs equal width and height, so the size was set to ${fmtSize(to)} (its smaller side).`;
+}
 function setupChanged() {
   if (!keepSharpNote) sharpNote = '';
   keepSharpNote = false;
+  squareNote = '';
+  squareUp();
   recomputeMat();
   syncSetupUI();
   saveSettings();
@@ -2055,6 +2089,7 @@ function initSetup() {
     if (S.mode === 'mat') { S.mat = oriented(S.mat.w, S.mat.h); S.print = oriented(S.print.w, S.print.h); }
     setupChanged();
   }));
+  document.querySelectorAll('input[name="shape"]').forEach(r => r.addEventListener('change', () => { S.shape = r.value; setupChanged(); }));
   document.querySelectorAll('input[name="orient"]').forEach(r => r.addEventListener('change', () => { setOrientation(r.value); setupChanged(); }));
   $('framePreset').addEventListener('change', e => {
     const p = PRESETS.find(x => x.key === e.target.value); if (!p) return;
@@ -2080,7 +2115,10 @@ function initSetup() {
 
   const onDim = (idW, idH, which) => {
     const target = () => which === 'frame' ? S.frame : which === 'print' ? S.print : S.mat;
-    const handler = () => {
+    const handler = e => {
+      // Circle: typing in one box writes the other, so the two stay equal.
+      const leads = which === 'mat' || (which === 'frame' && !(S.dir === 'print' && S.mode === 'mat')) || (which === 'print' && S.dir === 'print');
+      if (S.shape === 'circle' && !layoutOn() && leads && e && e.target) $(e.target.id === idW ? idH : idW).value = e.target.value;
       readDim(idW, idH, target(), unitOf(which));
       if (which === 'mat') S.matAuto = false;
       if (which === 'print' && S.dir === 'frame') S.printAuto = false;
@@ -2092,8 +2130,8 @@ function initSetup() {
     };
     for (const id of [idW, idH]) {
       $(id).addEventListener('input', handler);
-      $(id).addEventListener('change', () => {
-        handler();
+      $(id).addEventListener('change', e => {
+        handler(e);
         const v = target()[id.endsWith('W') ? 'w' : 'h'];
         if (isFinite(v)) $(id).value = fmtValU(v, unitOf(which));
       });
@@ -2440,6 +2478,8 @@ function drawScene(v, g, sg, L, prev, dragging) {
   const visR = centered(sg, g.vis);
   const hidden = S.showHidden;
   const style = MOLDINGS[S.molding] || MOLDINGS.walnut;
+  const oval = g.shape === 'oval' || g.shape === 'circle';
+  const ell = R => { ctx.moveTo(R.x + R.w, R.y + R.h / 2); ctx.ellipse(R.x + R.w / 2, R.y + R.h / 2, R.w / 2, R.h / 2, 0, 0, Math.PI * 2); };
 
   // wall shadow
   ctx.save();
@@ -2449,13 +2489,29 @@ function drawScene(v, g, sg, L, prev, dragging) {
 
   // print (clipped to what shows, unless showing hidden edges)
   ctx.save();
-  if (!hidden) { ctx.beginPath(); ctx.rect(visR.x, visR.y, visR.w, visR.h); ctx.clip(); }
+  if (!hidden) { ctx.beginPath(); if (oval) ell(visR); else ctx.rect(visR.x, visR.y, visR.w, visR.h); ctx.clip(); }
   else { ctx.fillStyle = MAT_COLOR; ctx.fillRect(I.x, I.y, I.w, I.h); }
   if (L && L.collage) drawCollagePrint(ctx, printR, L, px); else drawPrint(ctx, printR, L, prev);
   ctx.restore();
 
+  // oval opening: the frame's own material fills the corners; mat mode below covers them instead
+  if (oval && !hidden && S.mode === 'frame') {
+    ctx.save(); ctx.beginPath(); ctx.rect(I.x, I.y, I.w, I.h); ell(visR);
+    ctx.fillStyle = style.c[1]; ctx.fill('evenodd'); ctx.restore();
+  }
+
   // mat
-  if (S.mode === 'mat') {
+  if (S.mode === 'mat' && oval) {
+    const b = Math.min(0.09, g.vis.w * 0.05, g.vis.h * 0.05);
+    const B = { x: visR.x - b, y: visR.y - b, w: visR.w + 2 * b, h: visR.h + 2 * b };
+    ctx.save();
+    ctx.globalAlpha = hidden ? 0.42 : 1;
+    ctx.beginPath(); ctx.rect(I.x, I.y, I.w, I.h); ell(B);
+    ctx.fillStyle = MAT_COLOR; ctx.fill('evenodd');
+    ctx.beginPath(); ell(B); ell(visR);
+    ctx.fillStyle = '#e4e1da'; ctx.fill('evenodd');
+    ctx.restore();
+  } else if (S.mode === 'mat') {
     const b = Math.min(0.09, g.vis.w * 0.05, g.vis.h * 0.05);
     const B = { x: visR.x - b, y: visR.y - b, w: visR.w + 2 * b, h: visR.h + 2 * b };
     ctx.save();
@@ -2496,7 +2552,7 @@ function drawScene(v, g, sg, L, prev, dragging) {
 
   if (hidden) {
     ctx.save();
-    ctx.beginPath(); ctx.rect(printR.x, printR.y, printR.w, printR.h); ctx.rect(visR.x, visR.y, visR.w, visR.h);
+    ctx.beginPath(); ctx.rect(printR.x, printR.y, printR.w, printR.h); if (oval) ell(visR); else ctx.rect(visR.x, visR.y, visR.w, visR.h);
     ctx.clip('evenodd');
     ctx.fillStyle = 'rgba(214,48,39,.16)'; ctx.fillRect(printR.x, printR.y, printR.w, printR.h);
     ctx.strokeStyle = 'rgba(214,48,39,.7)'; ctx.lineWidth = 1.2 * px;
@@ -2512,8 +2568,13 @@ function drawScene(v, g, sg, L, prev, dragging) {
     ctx.setLineDash([5 * px, 4 * px]);
     ctx.strokeStyle = '#d6302a'; ctx.strokeRect(printR.x, printR.y, printR.w, printR.h);
     ctx.setLineDash([]);
-    ctx.strokeStyle = '#1f9d6b'; ctx.strokeRect(visR.x, visR.y, visR.w, visR.h);
+    ctx.strokeStyle = '#1f9d6b';
+    if (oval) { ctx.beginPath(); ell(visR); ctx.stroke(); } else ctx.strokeRect(visR.x, visR.y, visR.w, visR.h);
     ctx.restore();
+  } else if (oval) {
+    // thin edge line so the opening reads without relying on shading alone
+    ctx.save(); ctx.lineWidth = 1.25 * px; ctx.strokeStyle = 'rgba(0,0,0,.45)';
+    ctx.beginPath(); ell(visR); ctx.stroke(); ctx.restore();
   }
 
   if (dragging && L && prev) {
@@ -2542,7 +2603,9 @@ function renderReadouts(g, p) {
     const chip = L.low ? '<span class="chip warn">low</span>' : L.dpi >= SHARP_DPI ? '<span class="chip ok">sharp</span>' : '<span class="chip ok">good</span>';
     const used = mode === 'fit' ? `all ${L.W} × ${L.H} px`
       : `${L.sw} × ${L.sh} px (${Math.round(100 * L.sw * L.sh / (L.W * L.H))}%)`;
-    ro.innerHTML = `<dt>Print</dt><dd>${fmtSize(g.print)}</dd>` +
+    const shapeRow = g.shape === 'circle' ? `<dt>Visible circle</dt><dd>${fmtVal(g.vis.w)} ${S.unit} across</dd>`
+      : g.shape === 'oval' ? `<dt>Visible oval</dt><dd>${fmtSize(g.vis)}</dd>` : '';
+    ro.innerHTML = `<dt>Print</dt><dd>${fmtSize(g.print)}</dd>` + shapeRow +
       `<dt>Output</dt><dd>${L.cw} × ${L.ch} px</dd>` +
       `<dt>Resolution</dt><dd>${dpi} DPI${chip}</dd>` +
       `<dt>Photo used</dt><dd>${used}</dd>`;
